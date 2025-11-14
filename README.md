@@ -1,84 +1,110 @@
-Dutchie Integration Engine (Container Edition)
+# **Dutchie Integration Engine (Container Edition)**
+*“Because moving dispensary data around shouldn’t feel like foraging in the woods after dark.”*
 
-This repository hosts the containerized version of my Dutchie integration engine. It manages inbound webhooks, scheduled syncs, and outbound posting into accounting and ERP targets. The goal is simple: provide a reliable, cloud-ready path to move Dutchie data where it needs to go.
+This repo contains the containerized Dutchie integration engine that powers automated syncs, incoming webhooks, and all the magical plumbing that makes accounting systems behave. It’s built for the cloud, runs lean, and tries its best not to cost you more than a cup of coffee when you don’t have clients yet.
 
-What This Repo Is
+---
 
-This repo exists so you can see how the container is built, how the service is structured, and how it deploys cleanly into Azure. It’s a reference implementation plus a transparent look at the architecture.
+## **What This Repo Is**
 
-You can explore the source, learn from the shape of the project, and understand how the containerized pipeline runs.
+A few things you should know before entering:
 
-What This Repo Is Not
+- You’re allowed to look around.  
+- You’re allowed to poke at the architecture and think, “Hey, that’s clever.”  
+- You’re allowed to run the container locally and watch it go *bloop* when a webhook hits.
 
-This is not an open source project.
-The code is not licensed for production use, commercial deployments, or derivative work.
+This repo is basically a guided museum tour of how the container works. No rope barriers, but please don’t touch the exhibits.
 
-If you want to run this engine in your environment, you’ll need a commercial license or SaaS access through Acadia Logic.
+---
 
-Features
+## **What This Repo Is Not**
 
-Webhook endpoint for Dutchie events
+Let’s get this out of the way:
 
-Scheduled sync worker (via Azure Container Apps Jobs)
+- This is **not** open source.  
+- You can’t deploy it in production.  
+- You can’t fork it, resell it, or use it to launch your own Dutchie-powered crime syndicate.  
+- You *may* admire it from a respectful distance.
 
-Scale to zero support
+If you actually want to run this thing for real, you’ll need a commercial license or SaaS access. Don’t worry — licenses are cheaper than lawsuits.
 
-Rate limiting, retries, and request signing
+---
 
-Container-first design with .NET 8
+## **Features**
 
-Fully environment-driven configuration
+Things it does on purpose:
 
-Azure-optimized HTTP port, health checks, and logging
+- Listens for Dutchie webhooks instead of you hammering refresh  
+- Runs scheduled syncs without needing an always-on server  
+- Scales to zero so you don’t get surprise cloud bills  
+- Speaks fluent .NET 8  
+- Behaves nicely in Azure Container Apps  
+- Uses environment variables so config isn’t a scavenger hunt  
 
-Local Development
+---
 
-You can test the container locally to understand the flow.
+## **Local Development**
 
+For the brave:
+
+```bash
 docker build -t dutchie-integrator .
 docker run -p 8080:8080 dutchie-integrator
+```
 
-Visit http://localhost:8080/health to confirm it’s running.
+Check that it’s alive:
 
+```
+http://localhost:8080/health
+```
 
-Environment variables follow typical conventions:
+If it says “OK,” your container is alive and probably hungry for API keys.
 
-DUTCHIE_API_KEY=
-DUTCHIE_WEBHOOK_SECRET=
-DB_CONNECTION_STRING=
+---
+
+### **Environment Variables**
+
+```text
+DUTCHIE_API_KEY=your_key_here
+DUTCHIE_WEBHOOK_SECRET=shh_its_a_secret
+DB_CONNECTION_STRING=please_not_in_plain_text
 TARGET_ENV=Local
+```
 
-Azure Deployment Overview
+---
 
-This engine is built to run on Azure Container Apps with the Consumption plan.
+## **Azure Deployment Overview**
 
-Recommended setup:
+Designed specifically for:
 
-Container App for the webhook interface
+- **Azure Container Apps (Consumption)** — the “I don’t want to pay for idle time” special  
+- A tiny Container App for webhooks  
+- A scheduled Job to run syncs  
+- Secrets stored somewhere safe (not your repo)  
+- Zero cost unless something happens, which in Dutchie land it always does at 3 AM  
 
-Container Apps Job for the scheduled syncs
+You get cloud hosting that basically naps until needed. Like a cat, but cheaper.
 
-Storage for state and logs
+---
 
-Secrets in Azure Key Vault or Container Apps secrets
+## **Licensing**
 
-Scaling configured to zero for low-cost startup
+**All rights reserved.**  
+(Yes, really. The lawyer version is in the LICENSE file.)
 
-This configuration keeps costs near zero until real traffic appears.
+- You may look  
+- You may learn  
+- You may not “borrow” the code and launch DutchieSyncr.io  
+- You may talk to me if you want to use this professionally  
 
-Licensing
+---
 
-All rights reserved.
-Viewing is permitted.
-Use is not.
+## **Commercial Licensing or SaaS Access**
 
-No production use, redistribution, or commercial deployment is allowed without a paid license or explicit written permission.
+If you want this engine running your dispensary or ERP sync life:
 
-See the LICENSE file for details.
+**Acadia Logic LLC**  
+info@acadialogic.io  
 
-Commercial Licensing or SaaS Access
+I promise licensing is painless and does *not* require selling your soul. Only a small portion of your monthly revenue.
 
-If you want to deploy this engine, integrate it into an accounting stack, or use it as a managed SaaS offering, reach out:
-
-Acadia Logic LLC
-info@acadialogic.io
